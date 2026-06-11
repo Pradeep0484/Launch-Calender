@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Company Launch Calendar — Sep 14, 2026</title>
+<style>
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --border: #e4e2dc;
+    --border2: #d0cec6;
+    --text: #1a1917;
+    --muted: #6b6860;
+    --faint: #9b9890;
+    --accent: #c45c1a;
+    --accent-light: #fdf0e8;
+    --purple: #5340b5;
+    --purple-light: #eeecfd;
+    --teal: #0d6e54;
+    --teal-light: #e1f5ee;
+    --amber: #8a4f0b;
+    --amber-light: #faeeda;
+    --green: #3a6c10;
+    --green-light: #eaf3de;
+    --blue: #184fa0;
+    --blue-light: #e6f1fb;
+    --coral: #993c1d;
+    --coral-light: #faece7;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-left h1 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .header-left p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .countdown {
+    background: var(--accent-light);
+    border: 1px solid #f0c8a0;
+    border-radius: var(--radius);
+    padding: 6px 14px;
+    text-align: center;
+  }
+
+  .countdown-n {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .countdown-l {
+    font-size: 11px;
+    color: var(--coral);
+    margin-top: 1px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    text-align: center;
+  }
+
+  .stat-n { font-size: 24px; font-weight: 700; color: var(--text); }
+  .stat-l { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .progress-wrap { margin-bottom: 1.25rem; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+  .progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--teal); border-radius: 3px; transition: width .4s ease; }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1.25rem;
+    align-items: center;
+  }
+
+  .controls label { font-size: 13px; color: var(--muted); margin-right: 2px; }
+
+  select {
+    font-size: 13px;
+    padding: 6px 28px 6px 10px;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6860' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    outline: none;
+    transition: border-color .15s;
+  }
+
+  select:focus { border-color: var(--purple); }
+
+  .btn-reset {
+    font-size: 12px;
+    padding: 6px 12px;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .15s;
+    margin-left: auto;
+  }
+
+  .btn-reset:hover { background: var(--bg); color: var(--text); }
+
+  .phase-block { margin-bottom: 1.5rem; }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+
+  .phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  .phase-name {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+  }
+
+  .phase-dates { font-size: 12px; color: var(--faint); margin-left: auto; }
+  .phase-count { font-size: 12px; color: var(--faint); }
+
+  .task {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 5px;
+    overflow: hidden;
+    transition: border-color .15s;
+  }
+
+  .task:hover { border-color: var(--border2); }
+  .task.done { opacity: .6; }
+  .task.done .task-title { text-decoration: line-through; color: var(--faint); }
+  .task.hidden { display: none; }
+
+  .task-main {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    align-items: start;
+    gap: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .chk-wrap { display: flex; align-items: center; justify-content: center; padding-top: 2px; }
+
+  .chk {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all .15s;
+    background: var(--surface);
+  }
+
+  .chk:hover { border-color: var(--teal); }
+  .chk.checked { background: var(--teal); border-color: var(--teal); }
+  .chk.checked::after { content: '✓'; font-size: 11px; color: #fff; }
+
+  .task-body { min-width: 0; }
+  .task-title { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.4; }
+  .task-sub { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+  .task-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .b-urgent { background: var(--coral-light); color: var(--coral); }
+  .b-high { background: var(--amber-light); color: var(--amber); }
+  .b-med { background: var(--green-light); color: var(--green); }
+  .b-low { background: var(--blue-light); color: var(--blue); }
+  .b-eve { background: var(--purple-light); color: var(--purple); }
+  .b-wkd { background: var(--teal-light); color: var(--teal); }
+  .b-ft { background: var(--amber-light); color: var(--amber); }
+  .b-post { background: var(--green-light); color: var(--green); }
+  .b-launch { background: var(--coral-light); color: var(--coral); }
+
+  .task-meta {
+    text-align: right;
+    font-size: 11px;
+    color: var(--faint);
+    white-space: nowrap;
+    line-height: 1.6;
+    flex-shrink: 0;
+  }
+
+  .chevron {
+    font-size: 12px;
+    color: var(--faint);
+    margin-top: 3px;
+    transition: transform .2s;
+  }
+
+  .task.open .chevron { transform: rotate(180deg); }
+
+  .task-detail {
+    display: none;
+    padding: 0 12px 12px 56px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    border-top: 1px solid var(--border);
+    background: #fafaf8;
+  }
+
+  .task.open .task-detail { display: block; }
+
+  .task-detail p { margin-top: 8px; }
+
+  .task-num {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--faint);
+    padding-top: 3px;
+    text-align: center;
+  }
+
+  .launch-task { border-color: var(--accent) !important; border-width: 1.5px !important; }
+
+  .empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--faint);
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 1rem; }
+    .main { padding: 1rem 1rem 3rem; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .task-meta { display: none; }
+    .controls { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Company Launch Calendar</h1>
+    <p>Bengaluru Consultancy — Target: Ganesh Chaturthi, Sep 14, 2026</p>
+  </div>
+  <div class="countdown">
+    <div class="countdown-n" id="days-left">—</div>
+    <div class="countdown-l">days to launch</div>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="stats">
+    <div class="stat"><div class="stat-n" id="s-total">0</div><div class="stat-l">Total tasks</div></div>
+    <div class="stat"><div class="stat-n" id="s-done">0</div><div class="stat-l">Completed</div></div>
+    <div class="stat"><div class="stat-n" id="s-urgent">0</div><div class="stat-l">Urgent</div></div>
+    <div class="stat"><div class="stat-n" id="s-pct">0%</div><div class="stat-l">Progress</div></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Overall progress</span>
+      <span id="prog-label">0 of 0 tasks done</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="controls">
+    <label for="f-phase">Phase</label>
+    <select id="f-phase" onchange="applyFilters()">
+      <option value="all">All phases</option>
+      <option value="p1">Phase 1 — Foundation</option>
+      <option value="p2">Phase 2 — Office & Digital</option>
+      <option value="p3">Phase 3 — People & Docs</option>
+      <option value="p4">Phase 4 — Brand & Ops</option>
+      <option value="p5">Phase 5 — Launch Week</option>
+      <option value="p6">Phase 6 — Post-Launch</option>
+    </select>
+
+    <label for="f-cat">Category</label>
+    <select id="f-cat" onchange="applyFilters()">
+      <option value="all">All categories</option>
+      <option value="legal">Company registration</option>
+      <option value="office">Office & infra</option>
+      <option value="digital">Digital presence</option>
+      <option value="people">People & HR</option>
+      <option value="ops">Operations</option>
+      <option value="biz">Business dev</option>
+    </select>
+
+    <label for="f-pri">Priority</label>
+    <select id="f-pri" onchange="applyFilters()">
+      <option value="all">All priorities</option>
+      <option value="urgent">Urgent</option>
+      <option value="high">High</option>
+      <option value="med">Medium</option>
+      <option value="low">Low</option>
+    </select>
+
+    <label for="f-avail">Availability</label>
+    <select id="f-avail" onchange="applyFilters()">
+      <option value="all">All windows</option>
+      <option value="eve">Evenings (Jun–Aug)</option>
+      <option value="wkd">Weekends (Jun–Aug)</option>
+      <option value="ft">Full-time (Sep 1–13)</option>
+      <option value="post">Post-launch (Sep 15–30)</option>
+    </select>
+
+    <label for="f-status">Status</label>
+    <select id="f-status" onchange="applyFilters()">
+      <option value="all">All tasks</option>
+      <option value="pending">Pending only</option>
+      <option value="done">Completed only</option>
+    </select>
+
+    <button class="btn-reset" onclick="resetFilters()">Reset filters</button>
+  </div>
+
+  <div id="board"></div>
+  <div class="empty-state" id="empty" style="display:none">No tasks match the current filters.</div>
+</div>
+
+<footer>
+  <p>Progress is saved in your browser. Share this file with co-directors — each person tracks independently.</p>
+  <p style="margin-top:4px">Last updated: June 2026 &nbsp;·&nbsp; Bengaluru Consultancy Launch Plan</p>
+</footer>
+
+<script>
+const LAUNCH = new Date('2026-09-14');
+
+const phases = [
+  {
+    id:'p1', label:'Phase 1 — Foundation (Legal)', dates:'Jun 11 – Jul 15', color:'#5340b5',
+    tasks:[
+      {id:'t1',n:'01',title:'Decide company name & check MCA availability',sub:'Reserve on mca.gov.in — keep 3 alternatives ready',week:'Jun 11–14',pri:'urgent',cat:'legal',avail:'eve',detail:'Visit mca.gov.in → Check Company Name. Reserve at least 3 options. File RUN (Reserve Unique Name). Approx cost: ₹1,000. Do this on day 1 — name approval unlocks everything else.'},
+      {id:'t2',n:'02',title:'Obtain DSC for all 3 shareholders',sub:'Class 3 Digital Signature Certificate — each director',week:'Jun 11–18',pri:'urgent',cat:'legal',avail:'eve',detail:'Each director needs Class 3 DSC. Vendors: eMudhra, Sify, NSDL. Cost: ₹1,500–2,500 per person. Takes 2–5 working days. Courier-based — track from home. Required before DIN application.'},
+      {id:'t3',n:'03',title:'Apply for DIN for each director',sub:'File DIR-3 KYC on MCA21 portal',week:'Jun 15–20',pri:'urgent',cat:'legal',avail:'eve',detail:'File DIR-3 on MCA21. Requires DSC, PAN, Aadhaar, photo. One-time lifetime number. No separate fee if included in SPICe+ incorporation filing.'},
+      {id:'t4',n:'04',title:'Draft MOA & AOA with CA/CS',sub:'Memorandum & Articles of Association',week:'Jun 18–25',pri:'high',cat:'legal',avail:'eve',detail:'Engage CA or CS. Define objects clause for consulting/drafting/architecture. Specify shareholding ratio for all 3 directors. Cost: ₹8,000–20,000 for professional drafting.'},
+      {id:'t5',n:'05',title:'File SPICe+ incorporation on MCA',sub:'Includes PAN, TAN, EPFO, ESIC in single form',week:'Jun 22–Jul 5',pri:'urgent',cat:'legal',avail:'eve',detail:'SPICe+ simultaneously issues: CIN, PAN, TAN, EPFO, ESIC. Govt fee: ₹5,000–15,000 depending on share capital. CA handles filing — you only sign digitally.'},
+      {id:'t6',n:'06',title:'Open company current account',sub:'HDFC / ICICI / SBI — bring CIN, MOA, PAN',week:'Jun 28–Jul 10',pri:'high',cat:'legal',avail:'wkd',detail:'Required docs: Certificate of Incorporation, MOA/AOA, PAN, board resolution, all directors KYC. One weekend visit. HDFC SmartUp, ICICI iStartup offer startup-friendly zero-balance options.'},
+      {id:'t7',n:'07',title:'Register GST (GSTIN)',sub:'Mandatory for billing — apply after office address is confirmed',week:'Jul 15–Aug 1',pri:'high',cat:'legal',avail:'eve',detail:'Apply on gst.gov.in. Need: PAN, Aadhaar, bank statement, rent agreement. SAC code for consulting services: 9983. Allow 7–10 working days. Target GSTIN by Aug 20 — you cannot invoice without it.'},
+      {id:'t8',n:'08',title:'Udyam (MSME) registration',sub:'Free — unlocks govt tenders, subsidies, priority loans',week:'Aug 1–10',pri:'med',cat:'legal',avail:'eve',detail:'Register on udyamregistration.gov.in. Free, instant, Aadhaar-based. Benefits: govt tender preference, collateral-free CGTMSE loans, 50% patent filing subsidy. Classification: Service Micro under ₹10L investment.'},
+    ]
+  },
+  {
+    id:'p2', label:'Phase 2 — Office & Digital Setup', dates:'Jun 14 – Sep 12', color:'#0d6e54',
+    tasks:[
+      {id:'t9',n:'09',title:'Buy domain & set up Google Workspace',sub:'yourfirm.com + professional email for all directors',week:'Jun 14–15',pri:'high',cat:'digital',avail:'wkd',detail:'One Saturday morning. Domain: GoDaddy/Namecheap ₹800–2,000/year. Google Workspace Business Starter: ₹125/user/month. Set up: info@, projects@, hr@, each director email. Configure DNS/MX records.'},
+      {id:'t10',n:'10',title:'Logo, brand kit & visiting cards',sub:'Brief freelancer — logo, colors, letterhead, visiting cards',week:'Jun 21–Jul 10',pri:'high',cat:'digital',avail:'wkd',detail:'Hire via Fiverr/Upwork/local. Deliverables: logo (SVG+PNG), color palette, letterhead template, visiting card design, social media banner set. Budget: ₹10,000–25,000. Print 250 visiting cards per director — ready before launch day.'},
+      {id:'t11',n:'11',title:'Website development',sub:'Brief developer — live by Aug 25 for basic SEO indexing',week:'Jul 5–Aug 25',pri:'high',cat:'digital',avail:'wkd',detail:'Review iterations on weekends. Write content evenings (30 min/page). Pages: Home, Services, About Team, Portfolio, Contact. Add: WhatsApp chat widget, Calendly booking link, Google Analytics. Soft-launch by Aug 25.'},
+      {id:'t12',n:'12',title:'Set up all social media profiles',sub:'LinkedIn company, Instagram, Facebook, YouTube, WhatsApp Business',week:'Jul 12–13',pri:'high',cat:'digital',avail:'wkd',detail:'One dedicated Saturday. All profiles created, brand kit applied, bios filled. Do not post yet — just set up. Pre-schedule Sep 14 launch posts. Enable WhatsApp Business catalog. Create Google Business Profile.'},
+      {id:'t13',n:'13',title:'Search & shortlist office space',sub:'1,200 sqft in Vijayanagar or Chandra Layout — visit 3–5 props',week:'Jul 19–Aug 10',pri:'urgent',cat:'office',avail:'wkd',detail:'Pre-screen on NoBroker/MagicBricks evenings. Visit on weekends. Check: power load, parking, generator, fiber availability, lift. Budget: ₹40–60/sqft → ₹48,000–72,000/month + 3 months deposit. 11-month L&L agreement avoids registration.'},
+      {id:'t14',n:'14',title:'Sign lease & pay deposit',sub:'Get agreement notarized — keys by Aug 14–15',week:'Aug 10–15',pri:'urgent',cat:'office',avail:'wkd',detail:'Have lawyer review before signing. Include: painting, fixtures, lock-in period, exit notice period. Keep original for GST registration. Target keys by Aug 14–15 to start 4-week interiors on Aug 15.'},
+      {id:'t15',n:'15',title:'Interior work — partition, paint, electrical, cabling',sub:'Contractor-led; supervise weekends + daily from Sep 1',week:'Aug 15–Sep 12',pri:'urgent',cat:'office',avail:'ft',detail:'Sequence: Week 1 civil/partition, Week 2 electrical + data cabling, Week 3 flooring + paint, Week 4 furniture + IT. Weekend supervision Aug 16, 23, 30. Daily supervision from Sep 1. Keep Sep 13 as punch-list buffer day.'},
+      {id:'t16',n:'16',title:'Furniture order & delivery',sub:'Workstations, meeting table, reception, chairs, storage',week:'Aug 2–Sep 9',pri:'high',cat:'office',avail:'wkd',detail:'Get quotes: Featherlite, Godrej Interio, local vendors. Order by Aug 15 for delivery window Sep 8–9. Budget: 6 workstations ₹15k–25k each, conference table ₹20k–40k, chairs ₹5k–8k each. Total estimate: ₹2.5–5L.'},
+      {id:'t17',n:'17',title:'IT procurement — computers, printer, networking',sub:'6 workstations, A3 laser printer, WiFi, UPS',week:'Aug 2–Sep 10',pri:'high',cat:'office',avail:'wkd',detail:'Per workstation: i5 12th gen + 16GB + 512 SSD ≈ ₹45,000–60,000. A3 laser printer for drawings: ₹25,000–45,000. TP-Link Omada WiFi: ₹8,000–15,000. UPS 1KVA per 2 desktops. Deliver and set up Sep 8–11. Total: ₹3–5L.'},
+      {id:'t18',n:'18',title:'AutoCAD & software licenses',sub:'AutoCAD LT, Tally/Zoho, Adobe CC, Microsoft 365',week:'Aug 15–Sep 10',pri:'high',cat:'office',avail:'ft',detail:'AutoCAD LT (1yr): ~₹38,000/seat. Tally Prime: ₹18,000 one-time. Adobe CC: ₹4,230/month. Alternatives: BricsCAD (cheaper), Zoho Books. Install and activate all licenses during Sep 8–12 interior finish week.'},
+    ]
+  },
+  {
+    id:'p3', label:'Phase 3 — People & HR', dates:'Aug 1 – Sep 10', color:'#993c1d',
+    tasks:[
+      {id:'t19',n:'19',title:'Draft HR policy document',sub:'Leave, attendance, code of conduct, IT policy, POSH',week:'Aug 1–15',pri:'high',cat:'people',avail:'eve',detail:'One policy per evening over 2 weeks. Minimum set: Leave Policy, Attendance & WFH, Code of Conduct, IT & Data Security, Confidentiality/NDA, POSH policy (mandatory once 10+ staff). Use Zoho People templates as starting point.'},
+      {id:'t20',n:'20',title:'Post job descriptions — interns & senior drafters',sub:'LinkedIn, Internshala, Naukri — screen CVs in evenings',week:'Aug 1–20',pri:'high',cat:'people',avail:'eve',detail:'Intern JD: AutoCAD basics, diploma/BE pursuing. Senior drafter JD: 3–5 yrs exp, AutoCAD/Revit, coordination drawings. Post: LinkedIn Jobs (free), Internshala (free for internships), Naukri ₹3–5k/posting. Screen CVs 20 min/evening.'},
+      {id:'t21',n:'21',title:'Conduct interviews — weekend rounds',sub:'AutoCAD practical test + director interview',week:'Aug 16–24',pri:'high',cat:'people',avail:'wkd',detail:'Round 1: AutoCAD 30-min practical test. Round 2: 30-min director interview. Keep score sheet. Check references for senior hires. Verbal offers by Aug 25. Aim: 4 confirmed joiners by Sep 1.'},
+      {id:'t22',n:'22',title:'Draft appointment letters & internship agreements',sub:'CTC, role, probation, notice period, NDA clause',week:'Aug 20–Sep 1',pri:'high',cat:'people',avail:'eve',detail:'Templates drafted in evenings. Finalize and print Sep 1–3. Must include: designation, CTC breakup, joining date, probation (3 months), notice period (1 month), IP assignment, confidentiality. Interns get internship agreement, not appointment letter.'},
+      {id:'t23',n:'23',title:'Register EPFO (Provident Fund)',sub:'Register employer on epfindia.gov.in',week:'Aug 1–Sep 1',pri:'high',cat:'people',avail:'eve',detail:'Mandatory at 20+ employees; register voluntarily from day 1 for goodwill. Employee contribution: 12% basic. Employer: 12% (8.33% EPS + 3.67% EPF). Use Zoho Payroll or Razorpay Payroll to automate.'},
+      {id:'t24',n:'24',title:'Set up payroll system',sub:'Zoho Payroll / Keka / Razorpay — first run Oct 1',week:'Aug 15–Sep 5',pri:'high',cat:'people',avail:'eve',detail:'Zoho Payroll: ₹40/employee/month. Keka: ₹6,999/month base. Razorpay Payroll: ₹200/employee/month. Load staff details, salary structures, TDS configuration. First salary payout: Oct 1. Integrate with accounting software.'},
+      {id:'t25',n:'25',title:'Staff reporting & joining formalities',sub:'All 4 staff join Sep 8–10; issue joining kit in person',week:'Sep 8–10',pri:'urgent',cat:'people',avail:'ft',detail:'Joining kit: appointment letter, NDA, IT policy sign-off, PF nomination form, bank details form, photo ID. Issue company email IDs same day. Assign workstation and buddy/mentor. First-day lunch with all directors.'},
+      {id:'t26',n:'26',title:'Initial training — 1 week',sub:'Orientation, CAD standards, workflows, software, client protocol',week:'Sep 8–12',pri:'high',cat:'people',avail:'ft',detail:'Day 1: Vision, org chart, office tour, IT setup. Day 2: CAD standards, drawing templates, layer naming. Day 3: Project workflow, site visit protocol. Day 4: Software, file management, cloud storage. Day 5: Billing, timesheets, client communication. Hand out printed training handbook.'},
+    ]
+  },
+  {
+    id:'p4', label:'Phase 4 — Brand, Ops & Templates', dates:'Aug 1 – Sep 13', color:'#184fa0',
+    tasks:[
+      {id:'t27',n:'27',title:'Draft standard formats & CAD templates',sub:'Title block, transmittal, MOM, site report, RFI, variation order',week:'Aug 1–25',pri:'high',cat:'ops',avail:'eve',detail:'Drawing title block (CAD template), document transmittal form, minutes of meeting template, site inspection report, RFI format, variation order, fee proposal template, invoice format, project status report, timesheet — 1 per evening over 10 days.'},
+      {id:'t28',n:'28',title:'QA/QC & document control SOPs',sub:'Drawing revision system, file numbering, backup policy',week:'Aug 10–25',pri:'med',cat:'ops',avail:'eve',detail:'QA/QC procedure, document numbering system, drawing revision control (A, B, C revisions), project file folder structure, data backup policy (daily automated). Reference ISO 9001 framework even without certification. Makes onboarding faster and impresses clients.'},
+      {id:'t29',n:'29',title:'Library setup — IS codes, NBC, CPWD manuals',sub:'Physical books + shared Google Drive folder structure',week:'Sep 1–10',pri:'med',cat:'ops',avail:'ft',detail:'Order from BIS online shop in August. Physical library: IS 456, IS 800, IS 1893, NBC 2016, SP 16, SP 34, CPWD specifications, BBMP/BDA bylaws. Google Drive: /Library/IS Codes/, /References/, /Bylaws/. Print catalogue and pin near bookshelf.'},
+      {id:'t30',n:'30',title:'Set up accounting & billing system',sub:'Zoho Books or Tally with GST invoicing configured',week:'Aug 1–Sep 10',pri:'high',cat:'ops',avail:'eve',detail:'Chart of accounts, GST invoice template (18% for consulting, SAC 9983), expense categories, bank reconciliation. First invoice ready to send Sep 15 if any project converts at launch. Monthly: GSTR-1 + GSTR-3B filing with CA.'},
+      {id:'t31',n:'31',title:'Professional indemnity insurance',sub:'Covers errors & omissions — critical for consultancy',week:'Aug 1–Sep 20',pri:'med',cat:'ops',avail:'eve',detail:'Contact Bajaj Allianz, HDFC Ergo, New India. Share: company profile, services, expected annual revenue. Premium: ₹15,000–40,000/year. Policy active within 5–7 days. Do not start billable work without this. Also consider office insurance (fire, theft) and group health for staff.'},
+      {id:'t32',n:'32',title:'Company brochure — content & print',sub:'A4 tri-fold, 500 copies — ready for launch day',week:'Aug 10–Sep 10',pri:'high',cat:'biz',avail:'eve',detail:'Write content evenings: About, Services, Team, Projects, Contact. Design in Canva or by designer. Print order by Sep 5 → delivery by Sep 12. 500 tri-fold copies ≈ ₹5,000–8,000. Include QR code to website.'},
+      {id:'t33',n:'33',title:'Client pitch deck & fee proposal template',sub:'10-slide deck + scope/fee proposal for residential & commercial',week:'Aug 15–Sep 5',pri:'high',cat:'biz',avail:'eve',detail:'Pitch deck: About, Problem we solve, Services, Methodology, Team, Portfolio samples, Fee structure, Timeline, Why us, Contact. Fee proposal: scope of work, deliverables, payment milestones, exclusions, T&Cs. Separate templates for residential vs commercial. Print 10 color copies for launch day.'},
+      {id:'t34',n:'34',title:'GeM portal registration',sub:'Central & state govt e-marketplace — free seller registration',week:'Sep 15–20',pri:'low',cat:'biz',avail:'post',detail:'gem.gov.in — free registration. Upload company documents, create service catalogue. Useful for govt consulting projects. Start bidding on smaller projects (₹5L–20L) to build government track record alongside private work.'},
+    ]
+  },
+  {
+    id:'p5', label:'Phase 5 — Launch Week', dates:'Sep 8 – Sep 14', color:'#c45c1a',
+    tasks:[
+      {id:'t35',n:'35',title:'Dry run — all systems check',sub:'Website, emails, software, payroll, filing, printer, video call',week:'Sep 10–12',pri:'high',cat:'ops',avail:'ft',detail:'Checklist: All emails working? Website live with contact form tested? Payroll loaded? CAD templates on server? All logins in password manager? Printer/scanner working? Video call setup tested? File racks labeled? Visiting cards and brochures received?'},
+      {id:'t36',n:'36',title:'Launch day prep — puja, guests, content',sub:'Book pandit, prepare welcome kit, queue all social posts',week:'Sep 10–13',pri:'urgent',cat:'biz',avail:'ft',detail:'Book pandit for Sep 14 morning. Guest list: 15–20 people — potential clients, partners, well-wishers. Prepare: brochure folder + visiting card + sweets (prasad). Pre-schedule all posts for 9 AM Sep 14. WhatsApp broadcast: compose and queue. Email draft ready.'},
+      {id:'t37',n:'37',title:'GANESH CHATURTHI — Official launch puja',sub:'Morning puja · afternoon guests · evening social campaign live',week:'Sep 14',pri:'urgent',cat:'biz',avail:'ft',detail:'8–10 AM: Puja at office. 11 AM–1 PM: Guests, brochure distribution, photos. 2 PM: All social posts go live. 4 PM: Directors send personal WhatsApp messages to top 30 contacts. Evening: Team dinner. Take all photos for LinkedIn article and Instagram reel.'},
+    ]
+  },
+  {
+    id:'p6', label:'Phase 6 — Post-Launch (Sep 15–30)', dates:'Sep 15 – Sep 30', color:'#3a6c10',
+    tasks:[
+      {id:'t38',n:'38',title:'Client outreach — first calls & meetings',sub:'Call top 10 targets, set 3–5 intro meetings, send 1 proposal',week:'Sep 15–22',pri:'urgent',cat:'biz',avail:'post',detail:'Most important post-launch activity. Script: "We've launched our consultancy — I'd love to catch up." Aim: 5 in-person meetings in Sep, 1 proposal sent before Sep 30. First project, even small, validates the firm to staff and market.'},
+      {id:'t39',n:'39',title:'Launch social media announcement campaign',sub:'LinkedIn article, Instagram reel, WhatsApp broadcast, email mailer',week:'Sep 14–16',pri:'high',cat:'digital',avail:'post',detail:'LinkedIn: founder story article (750 words). Instagram: office tour reel 30 sec. Facebook: photo post. YouTube: 60-sec intro video. WhatsApp broadcast to all contacts. Email via Mailchimp free (up to 500 contacts). Follow up calls to top 20 contacts personally.'},
+      {id:'t40',n:'40',title:'Udyam & GeM registration',sub:'Free — complete within first 2 weeks after launch',week:'Sep 15–20',pri:'med',cat:'legal',avail:'post',detail:'Udyam: udyamregistration.gov.in — free, instant, Aadhaar-based. GeM: gem.gov.in seller registration. BBMP/BDA empanelment: check eligibility. These open government project pipelines.'},
+      {id:'t41',n:'41',title:'Professional indemnity insurance — policy active',sub:'Complete before first billable project',week:'Sep 15–22',pri:'high',cat:'ops',avail:'post',detail:'If not done in Phase 4: contact Bajaj Allianz / HDFC Ergo / New India. Share company profile, services, expected revenue. Premium ₹15,000–40,000/year. Policy active within 5–7 days. Mandatory before first invoice.'},
+      {id:'t42',n:'42',title:'Content calendar — first 8 weeks of posts',sub:'Batch-create 16 posts for LinkedIn + Instagram',week:'Sep 15–25',pri:'med',cat:'digital',avail:'post',detail:'Plan 2 posts/week for 8 weeks. Mix: project insights, team intros, office photos, technical tips, industry news. Use Canva for graphics, Buffer (free) to schedule. Consistency beats frequency in first 3 months.'},
+      {id:'t43',n:'43',title:'First payroll run preparation',sub:'Sep salary ready for Oct 1 payout; first GSTR filing',week:'Sep 25–30',pri:'high',cat:'ops',avail:'post',detail:'Prorated Sep salary for staff (joined Sep 8–10). Deduct TDS/PF where applicable. Prepare salary slips. First GSTR-1 due Oct 11 for Sep transactions. Ensure GST invoices issued correctly. CA to assist with first return filing.'},
+      {id:'t44',n:'44',title:'First project kickoff (if inquiry converts)',sub:'Issue LOA, collect advance, open project file, assign team',week:'Sep 15–30',pri:'high',cat:'biz',avail:'post',detail:'If a project converts at or after launch: issue LOA, collect 10–25% advance, open project folder, assign lead drafter, set milestones, agree submission dates. Even a small residential project cements the firm\'s credibility with staff and validates the business.'},
+    ]
+  }
+];
+
+const checked = new Set(JSON.parse(localStorage.getItem('lc_checked') || '[]'));
+let expanded = null;
+
+function saveChecked() {
+  localStorage.setItem('lc_checked', JSON.stringify([...checked]));
+}
+
+function daysLeft() {
+  const now = new Date();
+  const diff = Math.ceil((LAUNCH - now) / 86400000);
+  document.getElementById('days-left').textContent = diff > 0 ? diff : 'Launched!';
+}
+
+function updateStats() {
+  const all = phases.flatMap(p => p.tasks);
+  const visible = all.filter(t => !document.getElementById('t-' + t.id)?.classList.contains('hidden'));
+  const done = [...checked].filter(id => all.find(t => t.id === id)).length;
+  const urgent = all.filter(t => t.pri === 'urgent').length;
+  document.getElementById('s-total').textContent = all.length;
+  document.getElementById('s-done').textContent = done;
+  document.getElementById('s-urgent').textContent = urgent;
+  const pct = all.length ? Math.round(done / all.length * 100) : 0;
+  document.getElementById('s-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = done + ' of ' + all.length + ' tasks done';
+}
+
+function applyFilters() {
+  const fp = document.getElementById('f-phase').value;
+  const fc = document.getElementById('f-cat').value;
+  const fpri = document.getElementById('f-pri').value;
+  const fa = document.getElementById('f-avail').value;
+  const fs = document.getElementById('f-status').value;
+  let anyVisible = false;
+  phases.forEach(ph => {
+    let phaseVisible = 0;
+    ph.tasks.forEach(t => {
+      const el = document.getElementById('t-' + t.id);
+      const show =
+        (fp === 'all' || fp === ph.id) &&
+        (fc === 'all' || fc === t.cat) &&
+        (fpri === 'all' || fpri === t.pri) &&
+        (fa === 'all' || fa === t.avail) &&
+        (fs === 'all' || (fs === 'done' ? checked.has(t.id) : !checked.has(t.id)));
+      el.classList.toggle('hidden', !show);
+      if (show) { phaseVisible++; anyVisible = true; }
+    });
+    const phEl = document.getElementById('ph-' + ph.id);
+    phEl.style.display = phaseVisible > 0 ? '' : 'none';
+    const cnt = phEl.querySelector('.phase-count');
+    if (cnt) cnt.textContent = phaseVisible + ' task' + (phaseVisible !== 1 ? 's' : '');
+  });
+  document.getElementById('empty').style.display = anyVisible ? 'none' : '';
+  updateStats();
+}
+
+function resetFilters() {
+  ['f-phase','f-cat','f-pri','f-avail','f-status'].forEach(id => {
+    document.getElementById(id).value = 'all';
+  });
+  applyFilters();
+}
+
+function toggleCheck(id, e) {
+  e.stopPropagation();
+  if (checked.has(id)) checked.delete(id);
+  else checked.add(id);
+  saveChecked();
+  const taskEl = document.getElementById('t-' + id);
+  taskEl.classList.toggle('done', checked.has(id));
+  const chk = taskEl.querySelector('.chk');
+  chk.classList.toggle('checked', checked.has(id));
+  updateStats();
+  const fs = document.getElementById('f-status').value;
+  if (fs !== 'all') applyFilters();
+}
+
+function toggleExpand(id) {
+  const el = document.getElementById('t-' + id);
+  if (expanded === id) {
+    el.classList.remove('open');
+    expanded = null;
+  } else {
+    if (expanded) document.getElementById('t-' + expanded)?.classList.remove('open');
+    el.classList.add('open');
+    expanded = id;
+  }
+}
+
+function priClass(p) {
+  return {urgent:'b-urgent',high:'b-high',med:'b-med',low:'b-low'}[p];
+}
+
+function availLabel(a) {
+  return {eve:'Evenings only',wkd:'Weekend',ft:'Full-time (Sep)',post:'Post-launch'}[a] || '';
+}
+
+function availClass(a) {
+  return {eve:'b-eve',wkd:'b-wkd',ft:'b-ft',post:'b-post'}[a] || '';
+}
+
+function render() {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+  phases.forEach(ph => {
+    const block = document.createElement('div');
+    block.className = 'phase-block';
+    block.id = 'ph-' + ph.id;
+    block.innerHTML = `<div class="phase-header">
+      <div class="phase-dot" style="background:${ph.color}"></div>
+      <span class="phase-name">${ph.label}</span>
+      <span class="phase-count">${ph.tasks.length} tasks</span>
+      <span class="phase-dates">${ph.dates}</span>
+    </div>`;
+    ph.tasks.forEach(t => {
+      const isDone = checked.has(t.id);
+      const isLaunch = t.id === 't37';
+      const el = document.createElement('div');
+      el.className = 'task' + (isDone ? ' done' : '') + (isLaunch ? ' launch-task' : '');
+      el.id = 't-' + t.id;
+      el.innerHTML = `<div class="task-main" onclick="toggleExpand('${t.id}')">
+        <div class="chk-wrap">
+          <div class="chk${isDone?' checked':''}" onclick="toggleCheck('${t.id}', event)" title="Mark complete"></div>
+        </div>
+        <div class="task-body">
+          <div class="task-title">${t.title}</div>
+          <div class="task-sub">${t.sub}</div>
+          <div class="task-badges">
+            <span class="badge ${priClass(t.pri)}">${t.pri}</span>
+            <span class="badge ${availClass(t.avail)}">${availLabel(t.avail)}</span>
+          </div>
+        </div>
+        <div class="task-meta">${t.week}<br><span class="chevron">▾</span></div>
+      </div>
+      <div class="task-detail"><p>${t.detail}</p></div>`;
+      block.appendChild(el);
+    });
+    board.appendChild(block);
+  });
+  updateStats();
+}
+
+daysLeft();
+render();
+applyFilters();
+</script>
+</body>
+</html>
